@@ -1,6 +1,7 @@
-CREATE DATABASE IF NOT EXISTS hotel_management_system;
+DROP DATABASE IF EXISTS hotel_management_db;
+CREATE DATABASE IF NOT EXISTS hotel_management_db;
 
-USE hotel_management_system;
+USE hotel_management_db;
 DROP TABLE IF EXISTS room_has_reservation;
 DROP TABLE IF EXISTS reservation;
 DROP TABLE IF EXISTS room;
@@ -39,7 +40,7 @@ CREATE TABLE reservation (
         ON DELETE RESTRICT
 );
 
-CREATE TABLE room_has_reservation (
+CREATE TABLE room_reservation (
     room_id BIGINT NOT NULL,
     reservation_id BIGINT NOT NULL,
     PRIMARY KEY (room_id, reservation_id),
