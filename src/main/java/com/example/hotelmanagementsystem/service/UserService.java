@@ -55,7 +55,6 @@ public class UserService {
         user.setPhone(requestDTO.phone());
         user.setAddress(requestDTO.address());
 
-        userRepository.save(user);
-        return userMapper.toDTO(user);
+        return userMapper.toDTO(userRepository.save(user));
     }
 }
