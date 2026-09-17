@@ -51,6 +51,12 @@ public class Reservation {
         roomReservations.add(roomReservation);
         roomReservation.setReservation(this);
     }
+    public void addRoom(Room room) {
+        RoomReservation roomReservation = new RoomReservation();
+        roomReservation.setRoom(room);
+        roomReservation.setPrice(room.getRoomType().getBasePrice());
+        addRoomReservation(roomReservation);
+    }
     public void removeRoomReservation(RoomReservation roomReservation) {
         roomReservations.remove(roomReservation);
         roomReservation.setReservation(null);
