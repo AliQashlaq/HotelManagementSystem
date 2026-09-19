@@ -39,6 +39,9 @@ public class Reservation {
     @Column(name = "check_out_date", nullable = false)
     private LocalDate checkOutDate;
 
+    @Enumerated(EnumType.STRING)
+    private ReservationStatus status;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -54,7 +57,7 @@ public class Reservation {
     public void addRoom(Room room) {
         RoomReservation roomReservation = new RoomReservation();
         roomReservation.setRoom(room);
-        roomReservation.setPrice(room.getRoomType().getBasePrice());
+        roomReservation.setPrice(room.getPrice());
         addRoomReservation(roomReservation);
     }
     public void removeRoomReservation(RoomReservation roomReservation) {
