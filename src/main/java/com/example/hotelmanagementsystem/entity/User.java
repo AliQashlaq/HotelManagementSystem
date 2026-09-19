@@ -40,6 +40,9 @@ public class User {
     @Column(length = 100)
     private String address;
 
+    @Column(nullable = false)
+    private boolean active = true;
+
     //mappedBy is to identify the name of the attribute in the other table
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Reservation> reservations = new ArrayList<>();
