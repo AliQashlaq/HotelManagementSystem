@@ -35,6 +35,9 @@ public class Room {
     @Column(nullable = false)
     private boolean occupied = false;
 
+    @Column(name = "price_per_night" , nullable = false)
+    private double price;
+
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
     private List<RoomReservation> roomReservations = new ArrayList<>();
 
