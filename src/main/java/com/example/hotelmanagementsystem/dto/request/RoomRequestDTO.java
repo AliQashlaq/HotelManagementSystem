@@ -11,6 +11,9 @@ public record RoomRequestDTO(
         String roomNumber,
 
         @NotNull(message = "Room type is required")
-        RoomType roomType
+        RoomType roomType,
+
+        @NotNull(message = "Price is required")
+        double price
 ) {
 }
