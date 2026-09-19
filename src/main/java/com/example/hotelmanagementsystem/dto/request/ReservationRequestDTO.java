@@ -6,14 +6,14 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 public record ReservationRequestDTO(
         @NotNull(message = "User ID is required")
         Long userId,
 
         @NotEmpty(message = "At least one room should be selected")
-        List<Long> roomIds,
+        Set<Long> roomIds,
 
         @NotNull(message = "Check-in date is required")
         @FutureOrPresent(message = "Check-in date must be today or in the future")

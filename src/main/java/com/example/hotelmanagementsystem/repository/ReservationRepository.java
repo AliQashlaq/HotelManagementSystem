@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     @Query("""
@@ -16,7 +16,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
       AND rr.reservation.checkOutDate > :checkInDate
     """)
     boolean existsOverlappingReservations(
-            @Param("roomIds") List<Long> roomIds,
+            @Param("roomIds") Set<Long> roomIds,
             @Param("checkInDate") LocalDate checkInDate,
             @Param("checkOutDate") LocalDate checkOutDate
     );
