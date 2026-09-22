@@ -50,6 +50,9 @@ public class Reservation {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    @Column(name = "price_per_night" , nullable = false)
+    private double price;
+
     public void addRoomReservation(RoomReservation roomReservation) {
         roomReservations.add(roomReservation);
         roomReservation.setReservation(this);
