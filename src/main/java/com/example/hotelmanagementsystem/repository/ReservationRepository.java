@@ -12,6 +12,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query("""
     SELECT COUNT(rr) > 0 FROM RoomReservation rr
     WHERE rr.room.roomId IN :roomIds
+      AND rr.reservation.status = CONFIRMED
       AND rr.reservation.checkInDate < :checkOutDate
       AND rr.reservation.checkOutDate > :checkInDate
     """)
