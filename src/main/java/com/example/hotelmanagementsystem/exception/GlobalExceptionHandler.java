@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import java.util.Map;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -54,6 +52,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleDataIntegrityViolation(DataIntegrityViolationException ex){
         ErrorResponseDTO error = new ErrorResponseDTO("Database constraint violation: duplicate record or invalid reference"
                   , HttpStatus.BAD_REQUEST.value()); // hardcode the database error message to prevent severe security leaks
+        return ResponseEntity.badRequest().body(error);
+    }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponseDTO> handleIllegalArgument(IllegalArgumentException argumentEx){
+        ErrorResponseDTO error = new ErrorResponseDTO(argumentEx.getMessage()
+                , HttpStatus.BAD_REQUEST.value()); //
+        return ResponseEntity.badRequest().body(error);
+    }
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ErrorResponseDTO> handleIllegalState(IllegalStateException stateEx){
+        ErrorResponseDTO error = new ErrorResponseDTO(stateEx.getMessage()
+                , HttpStatus.BAD_REQUEST.value());
         return ResponseEntity.badRequest().body(error);
     }
     // Code 404
