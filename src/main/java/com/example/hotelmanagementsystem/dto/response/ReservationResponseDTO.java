@@ -1,17 +1,17 @@
 package com.example.hotelmanagementsystem.dto.response;
 
-import com.example.hotelmanagementsystem.entity.RoomReservation;
+import com.example.hotelmanagementsystem.entity.ReservationStatus;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 public record ReservationResponseDTO(
-        Long reservationId,
+        Long id,
         Long userId,
+        Set<Long> roomIds,
         LocalDate checkInDate,
         LocalDate checkOutDate,
-        List<RoomReservation> bookedRooms,
-        LocalDateTime createdAt
+        ReservationStatus status,
+        double price
 ) {
 }
