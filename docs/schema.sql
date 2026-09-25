@@ -1,55 +1,67 @@
-DROP DATABASE IF EXISTS hotel_management_db;
 CREATE DATABASE IF NOT EXISTS hotel_management_db;
-
 USE hotel_management_db;
-DROP TABLE IF EXISTS room_has_reservation;
+
+-- Temporary disable foreign key checks to safely drop in any order
+SET FOREIGN_KEY_CHECKS = 0;
+
+DROP TABLE IF EXISTS room_reservation;
 DROP TABLE IF EXISTS reservation;
 DROP TABLE IF EXISTS room;
-DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS users;
 
-CREATE TABLE user (
+SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE IF NOT EXISTS users (
     user_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL,
+    username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    phone VARCHAR(12),
+    phone VARCHAR(12) UNIQUE,
     address VARCHAR(100),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE room (
+CREATE TABLE IF NOT EXISTS room (
     room_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    room_type VARCHAR(50) NOT NULL,
-    occupied TINYINT(1) DEFAULT 0 NOT NULL,
     room_number VARCHAR(10) NOT NULL UNIQUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL
+    room_type VARCHAR(50) NOT NULL,
+    occupied BOOLEAN NOT NULL DEFAULT FALSE,
+    price_per_night DECIMAL(10,2) NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE reservation (
+CREATE TABLE IF NOT EXISTS reservation (
     reservation_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
     check_in_date DATE NOT NULL,
     check_out_date DATE NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
-    user_id BIGINT NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'CONFIRMED',
+    total_price DECIMAL(10, 2) NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_reservation_user
-        FOREIGN KEY (user_id) REFERENCES user (user_id)
-        ON UPDATE CASCADE
-        ON DELETE RESTRICT
+    FOREIGN KEY (user_id)
+    REFERENCES users (user_id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
 );
 
-CREATE TABLE room_reservation (
-    room_id BIGINT NOT NULL,
+CREATE TABLE IF NOT EXISTS room_reservation (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     reservation_id BIGINT NOT NULL,
-    PRIMARY KEY (room_id, reservation_id),
-    CONSTRAINT fk_rhr_room
-        FOREIGN KEY (room_id) REFERENCES room (room_id)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    CONSTRAINT fk_rhr_reservation
-        FOREIGN KEY (reservation_id) REFERENCES reservation (reservation_id)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
+    room_id BIGINT NOT NULL,
+    total_price DECIMAL(10, 2) NOT NULL,
+    CONSTRAINT fk_room_reservation_reservation
+    FOREIGN KEY (reservation_id)
+    REFERENCES reservation (reservation_id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+    CONSTRAINT fk_room_reservation_room
+    FOREIGN KEY (room_id)
+    REFERENCES room (room_id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
 );
