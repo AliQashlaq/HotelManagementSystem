@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class Reservation {
     private LocalDate checkOutDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 20)
     private ReservationStatus status;
 
     @CreationTimestamp
@@ -50,8 +52,8 @@ public class Reservation {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @Column(name = "price_per_night" , nullable = false)
-    private double price;
+    @Column(name = "price_per_night" , nullable = false, precision = 10, scale = 2)
+    private BigDecimal totalPrice;
 
     public void addRoomReservation(RoomReservation roomReservation) {
         roomReservations.add(roomReservation);
@@ -60,7 +62,7 @@ public class Reservation {
     public void addRoom(Room room) {
         RoomReservation roomReservation = new RoomReservation();
         roomReservation.setRoom(room);
-        roomReservation.setPrice(room.getPrice());
+        roomReservation.setTotalPrice(room.getPrice());
         addRoomReservation(roomReservation);
     }
     public void removeRoomReservation(RoomReservation roomReservation) {

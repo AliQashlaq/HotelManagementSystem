@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +36,8 @@ public class Room {
     @Column(nullable = false)
     private boolean occupied = false;
 
-    @Column(name = "price_per_night" , nullable = false)
-    private double price;
+    @Column(name = "price_per_night" , nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
 
     @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
     private List<RoomReservation> roomReservations = new ArrayList<>();

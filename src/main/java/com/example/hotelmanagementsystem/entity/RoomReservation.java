@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,6 +27,6 @@ public class RoomReservation {
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 
-    @Column(name = "price_per_night" , nullable = false)
-    private double price;
+    @Column(name = "total_price" , nullable = false,  precision = 10, scale = 2)
+    private BigDecimal totalPrice;
 }
