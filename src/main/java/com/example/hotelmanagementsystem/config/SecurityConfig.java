@@ -4,11 +4,9 @@ import com.example.hotelmanagementsystem.entity.User;
 import com.example.hotelmanagementsystem.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,7 +18,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
-import java.util.Optional;
 
 @Configuration
 @EnableMethodSecurity
@@ -32,13 +29,8 @@ public class SecurityConfig {
     }
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
-        return username -> {
-            Optional<User> userOptional = userRepository.findByUsername(username);
-            if (userOptional.isPresent()) {
-                return (UserDetails) userOptional.get();
-            }
-            throw new UsernameNotFoundException("User not found");
-        };
+        return username -> (UserDetails) userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
