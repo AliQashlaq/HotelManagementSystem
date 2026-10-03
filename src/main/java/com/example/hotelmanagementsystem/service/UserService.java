@@ -9,6 +9,7 @@ import com.example.hotelmanagementsystem.util.mapper.UserMapper;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     // using readOnly hibernate skips snapshot creation and dirty checking entirely, saving CPU and heap memory
     @Transactional(readOnly = true)
@@ -60,10 +62,12 @@ public class UserService {
         if(userRepository.existsByEmail(requestDTO.email())){
             throw new DuplicateResourceException("Email is already in use: " + requestDTO.email());
         }
+        String hashedPassword = passwordEncoder.encode(requestDTO.password());
+
         User user = new  User();
         user.setUsername(requestDTO.username());
         user.setEmail(requestDTO.email());
-        user.setPassword(requestDTO.password());
+        user.setPassword(hashedPassword);
         user.setPhone(requestDTO.phone());
         user.setAddress(requestDTO.address());
 
