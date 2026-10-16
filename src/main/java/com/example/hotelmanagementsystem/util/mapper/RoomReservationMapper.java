@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 public class RoomReservationMapper {
     public RoomReservationResponseDTO toDTO(RoomReservation roomReservation) {
         return new RoomReservationResponseDTO(roomReservation.getId(), roomReservation.getRoom().getRoomId(),
-                roomReservation.getRoom().getRoomNumber(), roomReservation.getPrice());
+                roomReservation.getRoom().getRoomNumber(), roomReservation.getTotalPrice());
     }
 }

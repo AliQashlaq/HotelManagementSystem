@@ -2,6 +2,7 @@ package com.example.hotelmanagementsystem.dto.response;
 
 import com.example.hotelmanagementsystem.entity.ReservationStatus;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -12,6 +13,6 @@ public record ReservationResponseDTO(
         LocalDate checkInDate,
         LocalDate checkOutDate,
         ReservationStatus status,
-        double price
+        BigDecimal price
 ) {
 }

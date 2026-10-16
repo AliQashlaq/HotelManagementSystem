@@ -25,6 +25,6 @@ public class ReservationMapper {
                 reservation.getCheckInDate(),
                 reservation.getCheckOutDate(),
                 reservation.getStatus(),
-                reservation.getPrice());
+                reservation.getTotalPrice());
     }
 }
